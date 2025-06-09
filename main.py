@@ -60,3 +60,24 @@ def handle_enter():
     mood = detect_mood(ai_response)
     user_input = ""
     draw_character()
+
+def detect_mood(text):
+    text = text.lower()
+    if "happy" in text or "glad" in text or "great" in text:
+        return "happy"
+    elif "sad" in text or "sorry" in text or "unhappy" in text:
+        return "sad"
+    elif "?" in text or "confused" in text:
+        return "confused"
+    else:
+        return "neutral"
+
+def blink():
+    global is_blinking
+    is_blinking = True
+    draw_character()
+    pause(200)
+    is_blinking = False
+    draw_character()
+
+main()
