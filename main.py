@@ -33,3 +33,13 @@ def draw_face():
     else:
         cv.draw_oval(200, 150, 20, 20, color="black")  # Left eye
         cv.draw_oval(280, 150, 20, 20, color="black")  # Right eye
+
+    # Mouth based on mood
+    if mood == "happy":
+        cv.draw_arc(220, 220, 60, 40, start=0, extent=-180, color="green")
+    elif mood == "sad":
+        cv.draw_arc(220, 240, 60, 40, start=0, extent=180, color="blue")
+    elif mood == "confused":
+        cv.draw_text("?", 245, 230, size=30, color="orange")
+    else:
+        cv.draw_line(230, 240, 270, 240, color="gray")  # Neutral mouth
