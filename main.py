@@ -76,7 +76,7 @@ def blink():
     global is_blinking
     is_blinking = True
     draw_character()
-    pause(200)
+    cv.pause(200)
     is_blinking = False
     draw_character()
 
