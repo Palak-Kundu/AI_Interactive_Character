@@ -43,3 +43,20 @@ def draw_face():
         cv.draw_text("?", 245, 230, size=30, color="orange")
     else:
         cv.draw_line(230, 240, 270, 240, color="gray")  # Neutral mouth
+
+def handle_key(key):
+    global user_input
+    if key == "Backspace":
+        user_input = user_input[:-1]
+    elif len(key) == 1:
+        user_input += key
+    draw_character()
+
+def handle_enter():
+    global ai_response, user_input, mood
+    if user_input.strip() == "":
+        return
+    ai_response = call_gpt(user_input)
+    mood = detect_mood(ai_response)
+    user_input = ""
+    draw_character()
