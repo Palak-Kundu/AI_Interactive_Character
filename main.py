@@ -78,11 +78,22 @@ def handle_key(key):
     draw_character()
 
 def handle_enter():
-    global ai_response, user_input, mood
+    global ai_response, user_input, mood, typing, is_jumping, is_waving, mood_score
     if user_input.strip() == "":
         return
+    draw_character()
+    typing = True
+    draw_character()
+    cv.wait(0.5)
     ai_response = call_gpt(user_input)
+    typing = False
     mood = detect_mood(ai_response)
+    mood_score = update_mood_score(mood)
+    # Animation Triggers
+    if "dance" in user_input.lower() or "jump" in user_input.lower():
+        jump()
+    elif "hi" in user_input.lower() or "hello" in user_input.lower():
+        wave()
     user_input = ""
     draw_character()
 
