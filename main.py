@@ -122,4 +122,14 @@ def draw_mood_meter():
     color = "green" if mood_score > 70 else "orange" if mood_score > 40 else "red"
     cv.draw_rect(390, 40, mood_score, 10, color=color)
 
+def update_mood_score(mood):
+    if mood == "happy":
+        return min(mood_score + 10, 100)
+    elif mood == "sad":
+        return max(mood_score - 15, 0)
+    elif mood == "confused":
+        return max(mood_score - 5, 0)
+    else:
+        return mood_score
+
 main()
