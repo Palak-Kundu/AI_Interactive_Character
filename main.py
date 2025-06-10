@@ -1,11 +1,16 @@
 import canvas as cv
 from openai import call_gpt
 import random
+import time
 
 user_input = ""
 ai_response = ""
 mood = "neutral"
 is_blinking = False
+is_jumping = False
+is_waving = False
+typing = False
+mood_score = 50
 
 def main():
     cv.make_canvas(500, 500)
@@ -20,7 +25,10 @@ def draw_character():
     draw_face()
     cv.draw_text("Say something to your buddy:", 20, 20, size=16, color="black")
     cv.draw_text("You: " + user_input, 20, 400, size=14, color="darkblue")
-    cv.draw_text("Buddy: " + ai_response, 20, 430, size=14, color="darkgreen")
+    if typing:
+        cv.draw_text("Buddy is typing...", 20, 430, size=14, color="gray")
+    else:
+        cv.draw_text("Buddy: " + ai_response, 20, 430, size=14, color="darkgreen")
 
 def draw_face():
     # Head
