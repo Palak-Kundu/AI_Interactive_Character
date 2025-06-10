@@ -131,5 +131,21 @@ def update_mood_score(mood):
         return max(mood_score - 5, 0)
     else:
         return mood_score
+    
+def jump():
+    global is_jumping
+    is_jumping = True
+    draw_character()
+    cv.pause(300)
+    is_jumping = False
+    draw_character()
+
+def wave():
+    global is_waving
+    is_waving = True
+    draw_character()
+    cv.pause(500)
+    is_waving = False
+    draw_character()
 
 main()
