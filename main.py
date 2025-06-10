@@ -29,18 +29,35 @@ def draw_character():
         cv.draw_text("Buddy is typing...", 20, 430, size=14, color="gray")
     else:
         cv.draw_text("Buddy: " + ai_response, 20, 430, size=14, color="darkgreen")
+    draw_mood_meter()
 
 def draw_face():
+    x, y = 150, 100
+    if is_jumping:
+        y -= 30
     # Head
-    cv.draw_oval(150, 100, 200, 200, color="white")
+    cv.draw_oval(x, y, 200, 200, color="white")
 
     # Eyes
     if is_blinking:
-        cv.draw_line(200, 160, 220, 160, color="black")  # Left eye blink
-        cv.draw_line(280, 160, 300, 160, color="black")  # Right eye blink
+        cv.draw_line(200, y+60, 220, y+60, color="black")  # Left eye blink
+        cv.draw_line(280, y+60, 300, y+60, color="black")  # Right eye blink
     else:
         cv.draw_oval(200, 150, 20, 20, color="black")  # Left eye
         cv.draw_oval(280, 150, 20, 20, color="black")  # Right eye
+    
+    # Waving Arms
+    if is_waving:
+        cv.draw_line(x + 200, y + 100, x + 240, y + 50, color="black", width=3)
+    else:
+        cv.draw_line(x + 200, y + 100, x + 240, y + 120, color="black", width=3)
+
+    cv.draw_line(x + 0, y + 100, x - 40, y + 120, color="black", width=3)
+
+    # Body & Legs
+    cv.draw_line(x + 100, y + 200, x + 100, y + 270, color="black", width=3)
+    cv.draw_line(x + 100, y + 270, x + 80, y + 300, color="black", width=3)
+    cv.draw_line(x + 100, y + 270, x + 120, y + 300, color="black", width=3)
 
     # Mouth based on mood
     if mood == "happy":
@@ -87,5 +104,11 @@ def blink():
     cv.pause(200)
     is_blinking = False
     draw_character()
+
+def draw_mood_meter():
+    cv.draw_text("Mood", 400, 20, size=12)
+    cv.draw_rect(390, 40, 100, 10, color="gray")
+    color = "green" if mood_score > 70 else "orange" if mood_score > 40 else "red"
+    cv.draw_rect(390, 40, mood_score, 10, color=color)
 
 main()
