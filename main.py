@@ -14,6 +14,7 @@ is_waving = False
 typing = False
 mood_score = 50
 conversation_log = []
+wearing_hat = False
 
 def main():
     load_mood()
@@ -70,13 +71,18 @@ def draw_face():
 
     # Mouth based on mood
     if mood == "happy":
-        cv.draw_arc(220, 220, 60, 40, start=0, extent=-180, color="green")
+        cv.draw_arc(220, y+120, 60, 40, start=0, extent=-180, color="green")
     elif mood == "sad":
-        cv.draw_arc(220, 240, 60, 40, start=0, extent=180, color="blue")
+        cv.draw_arc(220, y+140, 60, 40, start=0, extent=180, color="blue")
     elif mood == "confused":
-        cv.draw_text("?", 245, 230, size=30, color="orange")
+        cv.draw_text("?", 245, y+120, size=30, color="orange")
     else:
-        cv.draw_line(230, 240, 270, 240, color="gray")  # Neutral mouth
+        cv.draw_line(230, y+140, 270, y+140, color="gray")  # Neutral mouth
+
+    if wearing_hat:
+        cv.draw_rect(180, y - 30, 140, 20, color="black")
+        cv.draw_rect(170, y - 10, 160, 10, color="black")
+
 
 def handle_key(key):
     global user_input
@@ -109,6 +115,11 @@ def handle_enter():
         jump()
     elif "hi" in user_input.lower() or "hello" in user_input.lower():
         wave()
+    elif "wear hat" in user_input.lower():
+        wearing_hat = True
+    elif "remove hat" in user_input.lower():
+        wearing_hat = False
+        
     user_input = ""
     save_mood()
     draw_character()
