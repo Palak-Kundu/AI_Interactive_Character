@@ -3,7 +3,7 @@ from openai import call_gpt
 import random
 import time
 from playsound import playsound  
-
+import os
 
 user_input = ""
 ai_response = ""
@@ -16,6 +16,7 @@ mood_score = 50
 conversation_log = []
 
 def main():
+    load_mood()
     cv.make_canvas(500, 500)
     cv.set_background_color("lightblue")
     draw_character()
@@ -33,6 +34,7 @@ def draw_character():
     else:
         cv.draw_text("Buddy: " + ai_response, 20, 430, size=14, color="darkgreen")
     draw_mood_meter()
+    draw_face()
     cv.draw_text("Chat Log:", 20, 310, size=14, color="black")
     y = 330
     for speaker, msg in conversation_log:
@@ -60,9 +62,8 @@ def draw_face():
     else:
         cv.draw_line(x + 200, y + 100, x + 240, y + 120, color="black", width=3)
 
-    cv.draw_line(x + 0, y + 100, x - 40, y + 120, color="black", width=3)
-
     # Body & Legs
+    cv.draw_line(x + 0, y + 100, x - 40, y + 120, color="black", width=3)
     cv.draw_line(x + 100, y + 200, x + 100, y + 270, color="black", width=3)
     cv.draw_line(x + 100, y + 270, x + 80, y + 300, color="black", width=3)
     cv.draw_line(x + 100, y + 270, x + 120, y + 300, color="black", width=3)
@@ -89,16 +90,16 @@ def handle_enter():
     global ai_response, user_input, mood, typing, is_jumping, is_waving, mood_score
     if user_input.strip() == "":
         return
+    conversation_log.append(("You", user_input))
     draw_character()
     typing = True
     draw_character()
-    cv.wait(0.5)
     playsound("typing-sound-effect-337681.mp3") 
+    cv.wait(0.5)
     ai_response = call_gpt(user_input)
-    conversation_log.append(("You", user_input))
     conversation_log.append(("Buddy", ai_response))
-    conversation_log = conversation_log[-6:]  # Keep last 6 lines
     typing = False
+    conversation_log = conversation_log[-6:]  # Keep last 6 lines
     mood = detect_mood(ai_response)
     mood_score = update_mood_score(mood)
     if mood == "sad":
@@ -109,6 +110,7 @@ def handle_enter():
     elif "hi" in user_input.lower() or "hello" in user_input.lower():
         wave()
     user_input = ""
+    save_mood()
     draw_character()
 
 def detect_mood(text):
@@ -162,5 +164,15 @@ def wave():
     cv.pause(500)
     is_waving = False
     draw_character()
+
+def save_mood():
+    with open("mood.txt", "w") as f:
+        f.write(str(mood_score))
+
+def load_mood():
+    global mood_score
+    if os.path.exists("mood.txt"):
+        with open("mood.txt", "r") as f:
+            mood_score = int(f.read())
 
 main()
