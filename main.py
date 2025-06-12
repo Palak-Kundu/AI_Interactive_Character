@@ -2,6 +2,8 @@ import canvas as cv
 from openai import call_gpt
 import random
 import time
+from playsound import playsound  
+
 
 user_input = ""
 ai_response = ""
