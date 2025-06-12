@@ -13,6 +13,7 @@ is_jumping = False
 is_waving = False
 typing = False
 mood_score = 50
+conversation_log = []
 
 def main():
     cv.make_canvas(500, 500)
@@ -32,6 +33,11 @@ def draw_character():
     else:
         cv.draw_text("Buddy: " + ai_response, 20, 430, size=14, color="darkgreen")
     draw_mood_meter()
+    cv.draw_text("Chat Log:", 20, 310, size=14, color="black")
+    y = 330
+    for speaker, msg in conversation_log:
+        cv.draw_text(f"{speaker}: {msg}", 20, y, size=12, color="black")
+        y += 20
 
 def draw_face():
     x, y = 150, 100
@@ -89,6 +95,9 @@ def handle_enter():
     cv.wait(0.5)
     playsound("typing-sound-effect-337681.mp3") 
     ai_response = call_gpt(user_input)
+    conversation_log.append(("You", user_input))
+    conversation_log.append(("Buddy", ai_response))
+    conversation_log = conversation_log[-6:]  # Keep last 6 lines
     typing = False
     mood = detect_mood(ai_response)
     mood_score = update_mood_score(mood)
