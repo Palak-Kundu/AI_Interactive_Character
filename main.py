@@ -87,10 +87,13 @@ def handle_enter():
     typing = True
     draw_character()
     cv.wait(0.5)
+    playsound("typing-sound-effect-337681.mp3") 
     ai_response = call_gpt(user_input)
     typing = False
     mood = detect_mood(ai_response)
     mood_score = update_mood_score(mood)
+    if mood == "sad":
+        playsound("e-oh-91678.mp3")
     # Animation Triggers
     if "dance" in user_input.lower() or "jump" in user_input.lower():
         jump()
@@ -137,6 +140,7 @@ def update_mood_score(mood):
 def jump():
     global is_jumping
     is_jumping = True
+    playsound("cartoon-jump-6462.mp3")
     draw_character()
     cv.pause(300)
     is_jumping = False
