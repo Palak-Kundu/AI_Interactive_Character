@@ -28,18 +28,18 @@ def main():
 def draw_character():
     cv.clear()
     draw_face()
-    cv.draw_text("Say something to your buddy:", 20, 20, size=16, color="black")
-    cv.draw_text("You: " + user_input, 20, 400, size=14, color="darkblue")
+    cv.create_text("Say something to your buddy:", 20, 20, size=16, color="black")
+    cv.create_text("You: " + user_input, 20, 400, size=14, color="darkblue")
     if typing:
-        cv.draw_text("Buddy is typing...", 20, 430, size=14, color="gray")
+        cv.create_text("Buddy is typing...", 20, 430, size=14, color="gray")
     else:
-        cv.draw_text("Buddy: " + ai_response, 20, 430, size=14, color="darkgreen")
+        cv.create_text("Buddy: " + ai_response, 20, 430, size=14, color="darkgreen")
     draw_mood_meter()
     draw_face()
-    cv.draw_text("Chat Log:", 20, 310, size=14, color="black")
+    cv.create_text("Chat Log:", 20, 310, size=14, color="black")
     y = 330
     for speaker, msg in conversation_log:
-        cv.draw_text(f"{speaker}: {msg}", 20, y, size=12, color="black")
+        cv.create_text(f"{speaker}: {msg}", 20, y, size=12, color="black")
         y += 20
 
 def draw_face():
@@ -47,41 +47,41 @@ def draw_face():
     if is_jumping:
         y -= 30
     # Head
-    cv.draw_oval(x, y, 200, 200, color="white")
+    cv.create_oval(x, y, 200, 200, color="white")
 
     # Eyes
     if is_blinking:
-        cv.draw_line(200, y+60, 220, y+60, color="black")  # Left eye blink
-        cv.draw_line(280, y+60, 300, y+60, color="black")  # Right eye blink
+        cv.create_line(200, y+60, 220, y+60, color="black")  # Left eye blink
+        cv.create_line(280, y+60, 300, y+60, color="black")  # Right eye blink
     else:
-        cv.draw_oval(200, 150, 20, 20, color="black")  # Left eye
-        cv.draw_oval(280, 150, 20, 20, color="black")  # Right eye
+        cv.create_oval(200, 150, 20, 20, color="black")  # Left eye
+        cv.create_oval(280, 150, 20, 20, color="black")  # Right eye
     
     # Waving Arms
     if is_waving:
-        cv.draw_line(x + 200, y + 100, x + 240, y + 50, color="black", width=3)
+        cv.create_line(x + 200, y + 100, x + 240, y + 50, color="black", width=3)
     else:
-        cv.draw_line(x + 200, y + 100, x + 240, y + 120, color="black", width=3)
+        cv.create_line(x + 200, y + 100, x + 240, y + 120, color="black", width=3)
 
     # Body & Legs
-    cv.draw_line(x + 0, y + 100, x - 40, y + 120, color="black", width=3)
-    cv.draw_line(x + 100, y + 200, x + 100, y + 270, color="black", width=3)
-    cv.draw_line(x + 100, y + 270, x + 80, y + 300, color="black", width=3)
-    cv.draw_line(x + 100, y + 270, x + 120, y + 300, color="black", width=3)
+    cv.create_line(x + 0, y + 100, x - 40, y + 120, color="black", width=3)
+    cv.create_line(x + 100, y + 200, x + 100, y + 270, color="black", width=3)
+    cv.create_line(x + 100, y + 270, x + 80, y + 300, color="black", width=3)
+    cv.create_line(x + 100, y + 270, x + 120, y + 300, color="black", width=3)
 
     # Mouth based on mood
     if mood == "happy":
-        cv.draw_arc(220, y+120, 60, 40, start=0, extent=-180, color="green")
+        cv.create_arc(220, y+120, 60, 40, start=0, extent=-180, color="green")
     elif mood == "sad":
-        cv.draw_arc(220, y+140, 60, 40, start=0, extent=180, color="blue")
+        cv.create_arc(220, y+140, 60, 40, start=0, extent=180, color="blue")
     elif mood == "confused":
-        cv.draw_text("?", 245, y+120, size=30, color="orange")
+        cv.create_text("?", 245, y+120, size=30, color="orange")
     else:
-        cv.draw_line(230, y+140, 270, y+140, color="gray")  # Neutral mouth
+        cv.create_line(230, y+140, 270, y+140, color="gray")  # Neutral mouth
 
     if wearing_hat:
-        cv.draw_rect(180, y - 30, 140, 20, color="black")
-        cv.draw_rect(170, y - 10, 160, 10, color="black")
+        cv.create_rectangle(180, y - 30, 140, 20, color="black")
+        cv.create_rectangle(170, y - 10, 160, 10, color="black")
 
 
 def handle_key(key):
@@ -101,7 +101,7 @@ def handle_enter():
     typing = True
     draw_character()
     playsound("typing-sound-effect-337681.mp3") 
-    cv.wait(0.5)
+    time.wait(0.5)
     ai_response = call_gpt(user_input)
     conversation_log.append(("Buddy", ai_response))
     typing = False
@@ -139,13 +139,13 @@ def blink():
     global is_blinking
     is_blinking = True
     draw_character()
-    cv.pause(200)
+    time.pause(200)
     is_blinking = False
     draw_character()
 
 def draw_mood_meter():
-    cv.draw_text("Mood", 400, 20, size=12)
-    cv.draw_rect(390, 40, 100, 10, color="gray")
+    cv.create_text("Mood", 400, 20, size=12)
+    cv.create_rectangle(390, 40, 100, 10, color="gray")
     color = "green" if mood_score > 70 else "orange" if mood_score > 40 else "red"
     cv.draw_rect(390, 40, mood_score, 10, color=color)
 
@@ -164,7 +164,7 @@ def jump():
     is_jumping = True
     playsound("cartoon-jump-6462.mp3")
     draw_character()
-    cv.pause(300)
+    time.pause(300)
     is_jumping = False
     draw_character()
 
@@ -172,7 +172,7 @@ def wave():
     global is_waving
     is_waving = True
     draw_character()
-    cv.pause(500)
+    time.pause(500)
     is_waving = False
     draw_character()
 
