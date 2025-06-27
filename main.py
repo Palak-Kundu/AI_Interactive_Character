@@ -1,6 +1,5 @@
-import canvas as cv
+from graphics import *
 from openai import call_gpt
-import random
 import time
 from playsound import playsound  
 import os
@@ -18,28 +17,28 @@ wearing_hat = False
 
 def main():
     load_mood()
-    cv.make_canvas(500, 500)
-    cv.set_background_color("lightblue")
+    canvas(500, 500)
+    canvas.set_background_color("lightblue")
     draw_character()
-    cv.set_interval(blink, 3000)  
-    cv.on_key_typed(handle_key)
-    cv.on_key_press("Enter", handle_enter)
+    canvas.set_interval(blink, 3000)  
+    canvas.on_key_typed(handle_key)
+    canvas.on_key_press("Enter", handle_enter)
 
 def draw_character():
-    cv.clear()
+    canvas.clear()
     draw_face()
-    cv.create_text("Say something to your buddy:", 20, 20, size=16, color="black")
-    cv.create_text("You: " + user_input, 20, 400, size=14, color="darkblue")
+    canvas.create_text("Say something to your buddy:", 20, 20, size=16, color="black")
+    canvas.create_text("You: " + user_input, 20, 400, size=14, color="darkblue")
     if typing:
-        cv.create_text("Buddy is typing...", 20, 430, size=14, color="gray")
+        canvas.create_text("Buddy is typing...", 20, 430, size=14, color="gray")
     else:
-        cv.create_text("Buddy: " + ai_response, 20, 430, size=14, color="darkgreen")
+        canvas.create_text("Buddy: " + ai_response, 20, 430, size=14, color="darkgreen")
     draw_mood_meter()
     draw_face()
-    cv.create_text("Chat Log:", 20, 310, size=14, color="black")
+    canvas.create_text("Chat Log:", 20, 310, size=14, color="black")
     y = 330
     for speaker, msg in conversation_log:
-        cv.create_text(f"{speaker}: {msg}", 20, y, size=12, color="black")
+        canvas.create_text(f"{speaker}: {msg}", 20, y, size=12, color="black")
         y += 20
 
 def draw_face():
@@ -47,41 +46,41 @@ def draw_face():
     if is_jumping:
         y -= 30
     # Head
-    cv.create_oval(x, y, 200, 200, color="white")
+    canvas.create_oval(x, y, 200, 200, color="white")
 
     # Eyes
     if is_blinking:
-        cv.create_line(200, y+60, 220, y+60, color="black")  # Left eye blink
-        cv.create_line(280, y+60, 300, y+60, color="black")  # Right eye blink
+        canvas.create_line(200, y+60, 220, y+60, color="black")  # Left eye blink
+        canvas.create_line(280, y+60, 300, y+60, color="black")  # Right eye blink
     else:
-        cv.create_oval(200, 150, 20, 20, color="black")  # Left eye
-        cv.create_oval(280, 150, 20, 20, color="black")  # Right eye
+        canvas.create_oval(200, 150, 20, 20, color="black")  # Left eye
+        canvas.create_oval(280, 150, 20, 20, color="black")  # Right eye
     
     # Waving Arms
     if is_waving:
-        cv.create_line(x + 200, y + 100, x + 240, y + 50, color="black", width=3)
+        canvas.create_line(x + 200, y + 100, x + 240, y + 50, color="black", width=3)
     else:
-        cv.create_line(x + 200, y + 100, x + 240, y + 120, color="black", width=3)
+        canvas.create_line(x + 200, y + 100, x + 240, y + 120, color="black", width=3)
 
     # Body & Legs
-    cv.create_line(x + 0, y + 100, x - 40, y + 120, color="black", width=3)
-    cv.create_line(x + 100, y + 200, x + 100, y + 270, color="black", width=3)
-    cv.create_line(x + 100, y + 270, x + 80, y + 300, color="black", width=3)
-    cv.create_line(x + 100, y + 270, x + 120, y + 300, color="black", width=3)
+    canvas.create_line(x + 0, y + 100, x - 40, y + 120, color="black", width=3)
+    canvas.create_line(x + 100, y + 200, x + 100, y + 270, color="black", width=3)
+    canvas.create_line(x + 100, y + 270, x + 80, y + 300, color="black", width=3)
+    canvas.create_line(x + 100, y + 270, x + 120, y + 300, color="black", width=3)
 
     # Mouth based on mood
     if mood == "happy":
-        cv.create_arc(220, y+120, 60, 40, start=0, extent=-180, color="green")
+        canvas.create_arc(220, y+120, 60, 40, start=0, extent=-180, color="green")
     elif mood == "sad":
-        cv.create_arc(220, y+140, 60, 40, start=0, extent=180, color="blue")
+        canvas.create_arc(220, y+140, 60, 40, start=0, extent=180, color="blue")
     elif mood == "confused":
-        cv.create_text("?", 245, y+120, size=30, color="orange")
+        canvas.create_text("?", 245, y+120, size=30, color="orange")
     else:
-        cv.create_line(230, y+140, 270, y+140, color="gray")  # Neutral mouth
+        canvas.create_line(230, y+140, 270, y+140, color="gray")  # Neutral mouth
 
     if wearing_hat:
-        cv.create_rectangle(180, y - 30, 140, 20, color="black")
-        cv.create_rectangle(170, y - 10, 160, 10, color="black")
+        canvas.create_rectangle(180, y - 30, 140, 20, color="black")
+        canvas.create_rectangle(170, y - 10, 160, 10, color="black")
 
 
 def handle_key(key):
@@ -144,10 +143,10 @@ def blink():
     draw_character()
 
 def draw_mood_meter():
-    cv.create_text("Mood", 400, 20, size=12)
-    cv.create_rectangle(390, 40, 100, 10, color="gray")
+    canvas.create_text("Mood", 400, 20, size=12)
+    canvas.create_rectangle(390, 40, 100, 10, color="gray")
     color = "green" if mood_score > 70 else "orange" if mood_score > 40 else "red"
-    cv.draw_rect(390, 40, mood_score, 10, color=color)
+    canvas.draw_rect(390, 40, mood_score, 10, color=color)
 
 def update_mood_score(mood):
     if mood == "happy":
