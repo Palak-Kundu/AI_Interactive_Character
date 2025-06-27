@@ -72,7 +72,7 @@ class AIBuddyApp:
 
     def blinking(self):
         while True:
-            time.sleep(3)
+            time.sleep(1)
             self.canvas.itemconfig(self.eye1, fill="white")
             self.canvas.itemconfig(self.eye2, fill="white")
             time.sleep(0.2)
